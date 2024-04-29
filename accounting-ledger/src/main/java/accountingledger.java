@@ -1,6 +1,5 @@
-import java.io.BufferedWriter;
-import java.io.FileWriter;
-import java.io.IOException;
+import java.io.*;
+import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.Scanner;
@@ -10,6 +9,10 @@ public class accountingledger {
     static LocalDateTime currentTime;
     static DateTimeFormatter fmt;
     static  String  DateTime;
+    static LocalDate currentDate = LocalDate.now();
+    static int currentMonth = currentDate.getMonthValue();
+    static int currentYear = currentDate.getYear();
+
 
     public static void homePage(){
         System.out.print("What would you like to do? ");
@@ -40,7 +43,7 @@ public class accountingledger {
             userChoice = scan.nextInt();
         }
     }
-    private static void addDeposit() {
+    public static void addDeposit() {
         // Ask user to enter their deposit information.
         System.out.println("\nPlease enter the deposit information:");
 
@@ -79,7 +82,7 @@ public class accountingledger {
         homePage();
 
     }
-    private static void makePayment() {
+    public static void makePayment() {
         // Ask user for the payment informaiton.
         System.out.println("\nPlease enter the payment information:");
 
@@ -119,7 +122,7 @@ public class accountingledger {
         // Go back to home menu.
         homePage();
     }
-    private static void ledger() {
+    public static void ledger() {
         System.out.println("Enter 1 to display all transactions");
         System.out.println("Enter 2 to display Deposits");
         System.out.println("Enter 3 to display Payments");
@@ -133,19 +136,19 @@ public class accountingledger {
         // If user chose A.
         if (ledgerInput==1) {
             // Call ledgerAll method.
-            ledgerAll();
+            AllTransaction();
             // If user chose D.
         } else if (ledgerInput==2) {
             // Call ledgerDeposits method.
-            ledgerDeposits();
+            viewDeposits();
             // If user chose P.
         } else if (ledgerInput==3) {
             // Call ledgerPayments method.
-            ledgerPayments();
+            viewPayments();
             // If user chose R.
         } else if (ledgerInput==4) {
             // Call ledgerReports method.
-            ledgerReports();
+            viewReports();
             // If user chose H.
         } else if (ledgerInput==5) {
             // Return to home.
@@ -159,17 +162,178 @@ public class accountingledger {
 
 
 
-    private static void ledgerReports() {
+
+    public static void AllTransaction() {
+        // Prints all entries to the terminal
+        String line;
+        try {
+            BufferedReader bufferedReader = new BufferedReader(new FileReader("transactions.csv"));
+            while ((line = bufferedReader.readLine()) != null) {
+                System.out.println(line);
+            }
+        } catch (IOException e) {
+            throw new RuntimeException(e);
+        }
+        ledger();
+
+    }
+    public static void viewDeposits() {
+        String line;
+
+        try {
+            BufferedReader bufferedReader = new BufferedReader(new FileReader("transactions.csv"));
+            while ((line = bufferedReader.readLine()) != null) {
+                String[] transaction= line.split("\\|");
+                if (Double.parseDouble(transaction[4]) > 0) {
+                    System.out.println(line);
+                }
+            }
+
+        } catch (IOException e) {
+            throw new RuntimeException(e);
+        }
+        ledger();
+    }
+    public static void viewPayments() {
+        String line;
+        try {
+            BufferedReader bufferedReader = new BufferedReader(new FileReader("transactions.csv"));
+            while ((line = bufferedReader.readLine()) != null) {
+                String[] transaction = line.split("\\|");
+                if (Double.parseDouble(transaction[4]) < 0){
+                    System.out.println(line);
+                }
+            }
+
+        } catch (IOException e) {
+            throw new RuntimeException(e);
+        }
+
+
+    }
+    public static void viewReports() {
+        System.out.println("\n1) Month to Date");
+        System.out.println("2) Previous Month");
+        System.out.println("3) Year to Date");
+        System.out.println("4) Previous Year");
+        System.out.println("5) Search by Vendor");
+        System.out.println("6) Custom Search");
+        System.out.println("7) Back");
+
+        // Ask user to choose an option.
+        System.out.print("Choose an option: ");
+        int userInput = scan.nextInt();
+        scan.nextLine();
+
+        // If user chose 1.
+        if (userInput == 1) {
+            // Call monthToDate method.
+            monthToDate();
+            // If user chose 2.
+        } else if (userInput == 2) {
+            // Call previousMonth method.
+            previousMonth();
+            // If user chose 3.
+        } else if (userInput == 3) {
+            // Call yearToDate method.
+            yearToDate();
+            // If user chose 4.
+        } else if (userInput == 4) {
+            // Call previousYear method.
+            previousYear();
+            // If user chose 5.
+        } else if (userInput == 5) {
+            // Call searchByVendor method.
+            searchByVendor();
+            // If user chose 6.
+        } else if (userInput == 6) {
+            // Call customSearch method.
+            customSearch();
+        }
+        // If user chose 0.
+        else if (userInput == 7) {
+            // Call ledgerReports method.
+            ledger();
+            // If user entered a wrong input.
+        } else {
+            System.out.print("Invalid input. Please try again: ");
+            userInput = scan.nextInt();
+        }
     }
 
-    private static void ledgerPayments() {
+
+
+
+    public static void monthToDate() {
+        String line;
+
+        try {
+            BufferedReader bufferedReader = new BufferedReader(new FileReader("transactions.csv"));
+            while ((line = bufferedReader.readLine()) != null) {
+                String[] transaction = line.split("\\|");
+                String[] date = transaction[0].split("-");
+                if (Double.parseDouble(date[1]) == currentMonth && Double.parseDouble(date[0]) == currentYear) {
+                    System.out.println(line);
+                }
+            }
+        } catch (IOException e) {
+            throw new RuntimeException(e);
+        }
+        viewReports();
     }
+    public static void previousMonth() {
+        String line;
+        try {
+            BufferedReader bufferedReader = new BufferedReader(new FileReader("transactions.csv"));
+            while ((line = bufferedReader.readLine()) != null) {
+                String[] transaction = line.split("\\|");
+                String[] date = transaction[0].split("-");
+                if (Double.parseDouble(date[1]) == currentMonth-1 && Integer.parseInt(date[0]) == currentYear) {
+                    System.out.println(line);
+                }
+            }
+        }catch (IOException e){
+            throw new RuntimeException(e);
+        }
+        viewReports();
 
-    private static void ledgerDeposits() {
     }
+    public static void yearToDate() {
+        String line;
 
-    private static void ledgerAll() {
+        try {
+            BufferedReader bufferedReader = new BufferedReader(new FileReader("transactions.csv"));
+            while ((line = bufferedReader.readLine()) != null) {
+                String[] transaction = line.split("\\|");
+                String[] date = transaction[0].split("-");
+                if (Integer.parseInt(date[0]) == currentYear) {
+                    System.out.println(line);
+                }
+            }
+        } catch (IOException e){
+            throw new RuntimeException(e);
+        }
+        viewReports();
     }
+    public static void previousYear() {
+        String line;
 
-
+        try {
+            BufferedReader bufferedReader = new BufferedReader(new FileReader("transactions.csv"));
+            while ((line = bufferedReader.readLine()) != null) {
+                String[] transaction = line.split("\\|");
+                String[] date = transaction[0].split("-");
+                if (Integer.parseInt(date[0]) == currentYear-1) {
+                    System.out.println(line);
+                }
+            }
+        } catch (IOException e){
+            throw new RuntimeException(e);
+        }
+        viewReports();
+    }
+    public static void searchByVendor() {
+    }
+    public static void customSearch() {
+    }
 }
