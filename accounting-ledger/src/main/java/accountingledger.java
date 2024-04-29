@@ -14,6 +14,11 @@ public class accountingledger {
     static int currentYear = currentDate.getYear();
 
 
+    public static void main(String[] args) {
+        homePage();
+    }
+
+
     public static void homePage(){
         System.out.print("What would you like to do? ");
         System.out.println("Enter 1 to Add Deposit");
@@ -22,60 +27,60 @@ public class accountingledger {
         System.out.println("Enter 4 to  Exit");
 
         int userChoice=scan.nextInt();
+        scan.nextLine();
         if (userChoice==1) {
-            // Call addDeposit method.
+
             addDeposit();
-            // If user chose P.
+
         } else if (userChoice==2) {
-            // Call makePayment method.
+
             makePayment();
-            // If user chose L.
+
         } else if (userChoice==3) {
-            // Call ledger method.
+
             ledger();
-            // If user chose X.
+
         } else if (userChoice==4) {
-            // Quit.
+
             System.exit(0);
-            // If user entered a wrong input.
+
         } else {
             System.out.print("Invalid input. Please try again: ");
             userChoice = scan.nextInt();
         }
     }
     public static void addDeposit() {
-        // Ask user to enter their deposit information.
+
         System.out.println("\nPlease enter the deposit information:");
 
-        // Ask user to enter the deposit information.
+
         System.out.print(" Please enter deposit description: ");
         String depositDescription = scan.nextLine();
+        scan.nextLine();
 
-        // Ask user to enter deposit vendor.
         System.out.print("Please enter deposit vendor: ");
         String depositVendor = scan.nextLine();
+          scan.nextLine();
 
-        // Ask user to enter deposit amount.
         System.out.print("Please enter deposit amount: ");
         double depositAmount = scan.nextDouble();
         scan.nextLine();
 
-        // Get current date and time.
+
         LocalDateTime currentTime = LocalDateTime.now();
 
-        // Set the format for the date and time.
+
         DateTimeFormatter fmt = DateTimeFormatter.ofPattern("yyyy-MM-dd|HH:mm:ss");
 
-        // Format the date and time.
         String  DateTime = currentTime.format(fmt);
 
-        // Write the deposit information into the csv.
+
         try (BufferedWriter writer = new BufferedWriter(new FileWriter("transactions.csv", true))) {
             writer.write("\n" + DateTime + "|" + depositDescription + "|" + depositVendor + "|" + depositAmount);
 
-            // Success messsage.
+
             System.out.println("\nDeposit information added to transactions.csv successfully.\n");
-            // If an error occured, print error.
+
         } catch (IOException e) {
             System.out.println("\nAn error occurred while writing to the file: " + e.getMessage() + "\n");
         }
@@ -88,12 +93,12 @@ public class accountingledger {
 
         // Ask user to enter the payment information.
         System.out.print("Enter payment description: ");
-        String paymentDescription = scan.nextLine();
+        String paymentDescription = scan.next();
 
         // Ask user to enter payment vendor.
         System.out.print("Enter payment vendor: ");
         String  paymentVendor = scan.nextLine();
-
+        scan.nextLine();
         // Ask user to enter payment amount.
         System.out.print("Enter payment amount (as negative): ");
         Double  paymentAmount = scan.nextDouble();
@@ -139,7 +144,7 @@ public class accountingledger {
             AllTransaction();
             // If user chose D.
         } else if (ledgerInput==2) {
-            // Call ledgerDeposits method.
+
             viewDeposits();
             // If user chose P.
         } else if (ledgerInput==3) {
@@ -184,7 +189,7 @@ public class accountingledger {
             BufferedReader bufferedReader = new BufferedReader(new FileReader("transactions.csv"));
             while ((line = bufferedReader.readLine()) != null) {
                 String[] transaction= line.split("\\|");
-                if (Double.parseDouble(transaction[4]) > 0) {
+                if ((Double.parseDouble(transaction[4])) > 0) {
                     System.out.println(line);
                 }
             }
@@ -203,12 +208,13 @@ public class accountingledger {
                 if (Double.parseDouble(transaction[4]) < 0){
                     System.out.println(line);
                 }
+
             }
 
         } catch (IOException e) {
             throw new RuntimeException(e);
         }
-
+        ledger();
 
     }
     public static void viewReports() {
@@ -252,10 +258,9 @@ public class accountingledger {
         }
         // If user chose 0.
         else if (userInput == 7) {
-            // Call ledgerReports method.
             ledger();
-            // If user entered a wrong input.
-        } else {
+        }
+        else {
             System.out.print("Invalid input. Please try again: ");
             userInput = scan.nextInt();
         }
@@ -275,6 +280,7 @@ public class accountingledger {
                 if (Double.parseDouble(date[1]) == currentMonth && Double.parseDouble(date[0]) == currentYear) {
                     System.out.println(line);
                 }
+
             }
         } catch (IOException e) {
             throw new RuntimeException(e);
@@ -310,6 +316,7 @@ public class accountingledger {
                     System.out.println(line);
                 }
             }
+            bufferedReader.close();
         } catch (IOException e){
             throw new RuntimeException(e);
         }
@@ -333,6 +340,23 @@ public class accountingledger {
         viewReports();
     }
     public static void searchByVendor() {
+        System.out.print("Please enter the name of the vendor : ");
+        String vendor = scan.nextLine();
+
+        String line;
+        // Read and query the csv file for entries from that vendor
+        try {
+            BufferedReader bufferedReader = new BufferedReader(new FileReader("transactions.csv"));
+            while ((line = bufferedReader.readLine()) != null) {
+                String[] tokens = line.split("\\|");
+                if (tokens[3].equalsIgnoreCase(vendor)) {
+                    System.out.println(line);
+                }
+            }
+            bufferedReader.close();
+        } catch (IOException e) {
+            throw new RuntimeException(e);
+        }
     }
     public static void customSearch() {
     }
