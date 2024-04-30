@@ -5,7 +5,10 @@ import java.time.format.DateTimeFormatter;
 import java.util.Scanner;
 
 public class accountingledger {
+    // Initialize the scanner.
     static Scanner scan=new Scanner(System.in);
+
+    // Create the variables.
     static LocalDateTime currentTime;
     static DateTimeFormatter fmt;
     static  String  DateTime;
@@ -18,8 +21,9 @@ public class accountingledger {
         homePage();
     }
 
-
+    // Create the homePage method.
     public static void homePage(){
+        // Ask the user what they want to do.
         System.out.print("What would you like to do? ");
         System.out.println("Enter 1 to Add Deposit");
         System.out.println("Enter 2 Make Payment ");
@@ -49,6 +53,7 @@ public class accountingledger {
             userChoice = scan.nextInt();
         }
     }
+    // Create the addDeposit method.
     public static void addDeposit() {
 
         System.out.println("\nPlease enter the deposit information:");
@@ -87,19 +92,20 @@ public class accountingledger {
         homePage();
 
     }
+    // Create the makePayment method.
     public static void makePayment() {
-        // Ask user for the payment informaiton.
+
         System.out.println("\nPlease enter the payment information:");
 
-        // Ask user to enter the payment information.
+
         System.out.print("Enter payment description: ");
         String paymentDescription = scan.next();
 
-        // Ask user to enter payment vendor.
+
         System.out.print("Enter payment vendor: ");
         String  paymentVendor = scan.nextLine();
         scan.nextLine();
-        // Ask user to enter payment amount.
+
         System.out.print("Enter payment amount (as negative): ");
         Double  paymentAmount = scan.nextDouble();
         scan.nextLine();
@@ -127,47 +133,35 @@ public class accountingledger {
         // Go back to home menu.
         homePage();
     }
+    // Create the ledger method.
     public static void ledger() {
+        System.out.print("Please select an option: ");
         System.out.println("Enter 1 to display all transactions");
         System.out.println("Enter 2 to display Deposits");
         System.out.println("Enter 3 to display Payments");
         System.out.println("Enter 4 to display Reports");
         System.out.println("Enter 5 to go back to Home");
 
-        // Ask the user what they want to do.
-        System.out.print("Please select an option: ");
+
+
         int  ledgerInput = scan.nextInt();
 
-        // If user chose A.
-        if (ledgerInput==1) {
-            // Call ledgerAll method.
-            AllTransaction();
-            // If user chose D.
-        } else if (ledgerInput==2) {
 
+        if (ledgerInput==1) {
+            AllTransaction();
+        } else if (ledgerInput==2) {
             viewDeposits();
-            // If user chose P.
         } else if (ledgerInput==3) {
-            // Call ledgerPayments method.
             viewPayments();
-            // If user chose R.
         } else if (ledgerInput==4) {
-            // Call ledgerReports method.
             viewReports();
-            // If user chose H.
         } else if (ledgerInput==5) {
-            // Return to home.
             homePage();
-            // If user entered a wrong input.
         } else {
             System.out.print("Invalid input. Please try again: ");
             ledgerInput = scan.nextInt();
         }
     }
-
-
-
-
     public static void AllTransaction() {
         // Prints all entries to the terminal
         String line;
@@ -182,6 +176,7 @@ public class accountingledger {
         ledger();
 
     }
+    // Create the viewDeposits method.
     public static void viewDeposits() {
         String line;
 
@@ -192,6 +187,7 @@ public class accountingledger {
                 if ((Double.parseDouble(transaction[4])) > 0) {
                     System.out.println(line);
                 }
+
             }
 
         } catch (IOException e) {
@@ -199,6 +195,7 @@ public class accountingledger {
         }
         ledger();
     }
+    // Create the viewPayments method.
     public static void viewPayments() {
         String line;
         try {
@@ -209,6 +206,7 @@ public class accountingledger {
                     System.out.println(line);
                 }
 
+
             }
 
         } catch (IOException e) {
@@ -217,46 +215,41 @@ public class accountingledger {
         ledger();
 
     }
+    // Create the viewReports method.
     public static void viewReports() {
-        System.out.println("\n1) Month to Date");
-        System.out.println("2) Previous Month");
-        System.out.println("3) Year to Date");
-        System.out.println("4) Previous Year");
-        System.out.println("5) Search by Vendor");
-        System.out.println("6) Custom Search");
-        System.out.println("7) Back");
-
-        // Ask user to choose an option.
         System.out.print("Choose an option: ");
+        System.out.println("\n Enter 1 to search transactions of current  Month.");
+        System.out.println("Enter 2 to search transactions of  Previous Month.");
+        System.out.println("Enter 3 to search transactions of current Year.");
+        System.out.println("Enter 4 to search transactions of  Previous Year");
+        System.out.println("Enter 5 to search  by Vendor");
+        System.out.println("Enter 6 to run  Custom Search");
+        System.out.println("Enter 7 to go  Back");
+
+
+
         int userInput = scan.nextInt();
         scan.nextLine();
 
-        // If user chose 1.
+
         if (userInput == 1) {
-            // Call monthToDate method.
             monthToDate();
-            // If user chose 2.
         } else if (userInput == 2) {
-            // Call previousMonth method.
             previousMonth();
-            // If user chose 3.
+
         } else if (userInput == 3) {
-            // Call yearToDate method.
             yearToDate();
-            // If user chose 4.
+
         } else if (userInput == 4) {
-            // Call previousYear method.
             previousYear();
-            // If user chose 5.
+
         } else if (userInput == 5) {
-            // Call searchByVendor method.
             searchByVendor();
-            // If user chose 6.
+
         } else if (userInput == 6) {
-            // Call customSearch method.
             customSearch();
         }
-        // If user chose 0.
+
         else if (userInput == 7) {
             ledger();
         }
@@ -265,10 +258,7 @@ public class accountingledger {
             userInput = scan.nextInt();
         }
     }
-
-
-
-
+    // Create monthToDate method.
     public static void monthToDate() {
         String line;
 
@@ -287,6 +277,7 @@ public class accountingledger {
         }
         viewReports();
     }
+    // Create previousMonth method.
     public static void previousMonth() {
         String line;
         try {
@@ -304,6 +295,7 @@ public class accountingledger {
         viewReports();
 
     }
+    // Create yearToDate method.
     public static void yearToDate() {
         String line;
 
@@ -322,6 +314,7 @@ public class accountingledger {
         }
         viewReports();
     }
+    // Create previousYear method.
     public static void previousYear() {
         String line;
 
@@ -339,17 +332,18 @@ public class accountingledger {
         }
         viewReports();
     }
+    // Create searchByVendor method.
     public static void searchByVendor() {
         System.out.print("Please enter the name of the vendor : ");
         String vendor = scan.nextLine();
 
         String line;
-        // Read and query the csv file for entries from that vendor
+
         try {
             BufferedReader bufferedReader = new BufferedReader(new FileReader("transactions.csv"));
             while ((line = bufferedReader.readLine()) != null) {
-                String[] tokens = line.split("\\|");
-                if (tokens[3].equalsIgnoreCase(vendor)) {
+                String[] transaction = line.split("\\|");
+                if (transaction[3].equalsIgnoreCase(vendor)) {
                     System.out.println(line);
                 }
             }
@@ -357,6 +351,7 @@ public class accountingledger {
         } catch (IOException e) {
             throw new RuntimeException(e);
         }
+        viewReports();
     }
     public static void customSearch() {
     }
