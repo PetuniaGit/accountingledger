@@ -3,7 +3,9 @@ import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.Scanner;
-
+/* this program keeps a record of all transactions of the user including deposits and payments.
+   it also allows the user to view all transactions ,deposits and payments  as well as filter
+    transactions by the name of the vendor.*/
 public class accountingledger {
     // Initialize the scanner.
     static Scanner scan=new Scanner(System.in);
@@ -12,9 +14,9 @@ public class accountingledger {
     static LocalDateTime currentTime;
     static DateTimeFormatter fmt;
     static  String  DateTime;
-    static LocalDate currentDate = LocalDate.now();
-    static int currentMonth = currentDate.getMonthValue();
-    static int currentYear = currentDate.getYear();
+    static LocalDate todaysDate = LocalDate.now();
+    static int thisMonth = todaysDate.getMonthValue();
+    static int thisYear = todaysDate.getYear();
     static boolean  foundTransaction;
 
 
@@ -52,6 +54,7 @@ public class accountingledger {
         } else {
             System.out.print("Invalid input. Please try again: ");
             userChoice = scan.nextInt();
+            homePage();
         }
     }
     // Create the addDeposit method.
@@ -72,9 +75,7 @@ public class accountingledger {
         double depositAmount = scan.nextDouble();
         scan.nextLine();
 
-
         LocalDateTime currentTime = LocalDateTime.now();
-
 
         DateTimeFormatter fmt = DateTimeFormatter.ofPattern("yyyy-MM-dd|HH:mm:ss");
 
@@ -143,10 +144,7 @@ public class accountingledger {
         System.out.println("Enter 4 to display Reports");
         System.out.println("Enter 5 to go back to Home");
 
-
-
         int  ledgerInput = scan.nextInt();
-
 
         if (ledgerInput==1) {
             AllTransaction();
@@ -177,7 +175,7 @@ public class accountingledger {
             throw new RuntimeException(e);
         }
         if(!foundTransaction){
-            System.out.println("No transaction found.");}
+            System.out.println("No transactions found.");}
         ledger();
 
     }
@@ -201,7 +199,7 @@ public class accountingledger {
             throw new RuntimeException(e);
         }
             if(!foundTransaction){
-                System.out.println("No transaction found.");}
+                System.out.println("No deposits found.");}
         ledger();
     }
     // Create the viewPayments method.
@@ -222,7 +220,7 @@ public class accountingledger {
             throw new RuntimeException(e);
         }
         if(!foundTransaction){
-            System.out.println("No transaction found.");
+            System.out.println("No payments found.");
         }
         ledger();
 
@@ -237,8 +235,6 @@ public class accountingledger {
         System.out.println("Enter 5 to search  by Vendor");
         System.out.println("Enter 6 to run  Custom Search");
         System.out.println("Enter 7 to go  Back");
-
-
 
         int userInput = scan.nextInt();
         scan.nextLine();
@@ -280,10 +276,9 @@ public class accountingledger {
             while ((line = bufReader.readLine()) != null) {
                 String[] transaction = line.split("\\|");
                 String[] date = transaction[0].split("-");
-                if (Double.parseDouble(date[1]) == currentMonth && Double.parseDouble(date[0]) == currentYear) {
+                if (Double.parseDouble(date[1]) == thisMonth && Double.parseDouble(date[0]) == thisYear) {
                     System.out.println(line);
                     foundTransaction=true;
-
                 }
 
             }
@@ -291,7 +286,7 @@ public class accountingledger {
             throw new RuntimeException(e);
         }
                 if(!foundTransaction){
-                    System.out.println("No transaction found.");}
+                    System.out.println("No transaction found for the current month.");}
         viewReports();
     }
     // Create previousMonth method.
@@ -303,7 +298,7 @@ public class accountingledger {
             while ((line = buffReader.readLine()) != null) {
                 String[] transaction = line.split("\\|");
                 String[] date = transaction[0].split("-");
-                if (Double.parseDouble(date[1]) == currentMonth-1 && Integer.parseInt(date[0]) == currentYear) {
+                if (Double.parseDouble(date[1]) == thisMonth -1 && Integer.parseInt(date[0]) == thisYear) {
                     System.out.println(line);
                     foundTransaction=true;
                 }
@@ -312,7 +307,7 @@ public class accountingledger {
             throw new RuntimeException(e);
         }
         if(!foundTransaction){
-            System.out.println("No transaction found.");}
+            System.out.println("No transaction found for the last month.");}
         viewReports();
 
     }
@@ -327,18 +322,17 @@ public class accountingledger {
             while ((line = buffReader.readLine()) != null) {
                 String[] transaction = line.split("\\|");
                 String[] date = transaction[0].split("-");
-                if (Integer.parseInt(date[0]) == currentYear) {
+                if (Integer.parseInt(date[0]) == thisYear) {
                     System.out.println(line);
                     foundTransaction=true;
                 }
             }
-
             buffReader.close();
         } catch (IOException e){
             throw new RuntimeException(e);
         }
         if(!foundTransaction){
-            System.out.println("No transaction found.");}
+            System.out.println("No transaction found for the current year.");}
         viewReports();
     }
     // Create previousYear method.
@@ -351,7 +345,7 @@ public class accountingledger {
             while ((line = buffReader.readLine()) != null) {
                 String[] transaction = line.split("\\|");
                 String[] date = transaction[0].split("-");
-                if (Integer.parseInt(date[0]) == currentYear-1) {
+                if (Integer.parseInt(date[0]) == thisYear -1) {
                     System.out.println(line);
                     foundTransaction=true;
                 }
@@ -360,7 +354,7 @@ public class accountingledger {
             throw new RuntimeException(e);
         }
         if(!foundTransaction){
-            System.out.println("No transaction found.");}
+            System.out.println("No transaction found for the previous year.");}
         viewReports();
     }
     // Create searchByVendor method.
@@ -385,7 +379,7 @@ public class accountingledger {
             throw new RuntimeException(e);
         }
                     if(!foundTransaction){
-                        System.out.println("No transaction found.");}
+                        System.out.println("No transaction found for the vendor.");}
         viewReports();
     }
     public static void customSearch() {
