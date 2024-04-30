@@ -15,6 +15,7 @@ public class accountingledger {
     static LocalDate currentDate = LocalDate.now();
     static int currentMonth = currentDate.getMonthValue();
     static int currentYear = currentDate.getYear();
+    static boolean  foundTransaction;
 
 
     public static void main(String[] args) {
@@ -80,8 +81,8 @@ public class accountingledger {
         String  DateTime = currentTime.format(fmt);
 
 
-        try (BufferedWriter writer = new BufferedWriter(new FileWriter("transactions.csv", true))) {
-            writer.write("\n" + DateTime + "|" + depositDescription + "|" + depositVendor + "|" + depositAmount);
+        try (BufferedWriter bufwriter = new BufferedWriter(new FileWriter("transactions.csv", true))) {
+            bufwriter.write("\n" + DateTime + "|" + depositDescription + "|" + depositVendor + "|" + depositAmount);
 
 
             System.out.println("\nDeposit information added to transactions.csv successfully.\n");
@@ -165,27 +166,33 @@ public class accountingledger {
     public static void AllTransaction() {
         // Prints all entries to the terminal
         String line;
+         foundTransaction=false;
         try {
-            BufferedReader bufferedReader = new BufferedReader(new FileReader("transactions.csv"));
-            while ((line = bufferedReader.readLine()) != null) {
+            BufferedReader buffReader = new BufferedReader(new FileReader("transactions.csv"));
+            while ((line = buffReader.readLine()) != null) {
                 System.out.println(line);
+                foundTransaction=true;
             }
         } catch (IOException e) {
             throw new RuntimeException(e);
         }
+        if(!foundTransaction){
+            System.out.println("No transaction found.");}
         ledger();
 
     }
     // Create the viewDeposits method.
     public static void viewDeposits() {
         String line;
+        foundTransaction=false;
 
         try {
-            BufferedReader bufferedReader = new BufferedReader(new FileReader("transactions.csv"));
-            while ((line = bufferedReader.readLine()) != null) {
+            BufferedReader bufReader = new BufferedReader(new FileReader("transactions.csv"));
+            while ((line = bufReader.readLine()) != null) {
                 String[] transaction= line.split("\\|");
                 if ((Double.parseDouble(transaction[4])) > 0) {
                     System.out.println(line);
+                    foundTransaction=true;
                 }
 
             }
@@ -193,24 +200,29 @@ public class accountingledger {
         } catch (IOException e) {
             throw new RuntimeException(e);
         }
+            if(!foundTransaction){
+                System.out.println("No transaction found.");}
         ledger();
     }
     // Create the viewPayments method.
     public static void viewPayments() {
         String line;
+         foundTransaction=false;
         try {
-            BufferedReader bufferedReader = new BufferedReader(new FileReader("transactions.csv"));
-            while ((line = bufferedReader.readLine()) != null) {
+            BufferedReader bufReader = new BufferedReader(new FileReader("transactions.csv"));
+            while ((line = bufReader.readLine()) != null) {
                 String[] transaction = line.split("\\|");
                 if (Double.parseDouble(transaction[4]) < 0){
                     System.out.println(line);
+                    foundTransaction=true;
                 }
-
-
             }
-
+            bufReader.close();
         } catch (IOException e) {
             throw new RuntimeException(e);
+        }
+        if(!foundTransaction){
+            System.out.println("No transaction found.");
         }
         ledger();
 
@@ -261,75 +273,94 @@ public class accountingledger {
     // Create monthToDate method.
     public static void monthToDate() {
         String line;
+        boolean foundTransaction=false;
 
         try {
-            BufferedReader bufferedReader = new BufferedReader(new FileReader("transactions.csv"));
-            while ((line = bufferedReader.readLine()) != null) {
+            BufferedReader bufReader = new BufferedReader(new FileReader("transactions.csv"));
+            while ((line = bufReader.readLine()) != null) {
                 String[] transaction = line.split("\\|");
                 String[] date = transaction[0].split("-");
                 if (Double.parseDouble(date[1]) == currentMonth && Double.parseDouble(date[0]) == currentYear) {
                     System.out.println(line);
+                    foundTransaction=true;
+
                 }
 
             }
         } catch (IOException e) {
             throw new RuntimeException(e);
         }
+                if(!foundTransaction){
+                    System.out.println("No transaction found.");}
         viewReports();
     }
     // Create previousMonth method.
     public static void previousMonth() {
         String line;
+         foundTransaction=false;
         try {
-            BufferedReader bufferedReader = new BufferedReader(new FileReader("transactions.csv"));
-            while ((line = bufferedReader.readLine()) != null) {
+            BufferedReader buffReader = new BufferedReader(new FileReader("transactions.csv"));
+            while ((line = buffReader.readLine()) != null) {
                 String[] transaction = line.split("\\|");
                 String[] date = transaction[0].split("-");
                 if (Double.parseDouble(date[1]) == currentMonth-1 && Integer.parseInt(date[0]) == currentYear) {
                     System.out.println(line);
+                    foundTransaction=true;
                 }
             }
         }catch (IOException e){
             throw new RuntimeException(e);
         }
+        if(!foundTransaction){
+            System.out.println("No transaction found.");}
         viewReports();
 
     }
     // Create yearToDate method.
     public static void yearToDate() {
         String line;
+         foundTransaction=false;
 
         try {
-            BufferedReader bufferedReader = new BufferedReader(new FileReader("transactions.csv"));
-            while ((line = bufferedReader.readLine()) != null) {
+            BufferedReader buffReader = new BufferedReader(new FileReader("transactions.csv"));
+
+            while ((line = buffReader.readLine()) != null) {
                 String[] transaction = line.split("\\|");
                 String[] date = transaction[0].split("-");
                 if (Integer.parseInt(date[0]) == currentYear) {
                     System.out.println(line);
+                    foundTransaction=true;
                 }
             }
-            bufferedReader.close();
+
+            buffReader.close();
         } catch (IOException e){
             throw new RuntimeException(e);
         }
+        if(!foundTransaction){
+            System.out.println("No transaction found.");}
         viewReports();
     }
     // Create previousYear method.
     public static void previousYear() {
         String line;
+         foundTransaction=false;
 
         try {
-            BufferedReader bufferedReader = new BufferedReader(new FileReader("transactions.csv"));
-            while ((line = bufferedReader.readLine()) != null) {
+            BufferedReader buffReader = new BufferedReader(new FileReader("transactions.csv"));
+            while ((line = buffReader.readLine()) != null) {
                 String[] transaction = line.split("\\|");
                 String[] date = transaction[0].split("-");
                 if (Integer.parseInt(date[0]) == currentYear-1) {
                     System.out.println(line);
+                    foundTransaction=true;
                 }
             }
         } catch (IOException e){
             throw new RuntimeException(e);
         }
+        if(!foundTransaction){
+            System.out.println("No transaction found.");}
         viewReports();
     }
     // Create searchByVendor method.
@@ -338,19 +369,23 @@ public class accountingledger {
         String vendor = scan.nextLine();
 
         String line;
+         foundTransaction=false;
 
         try {
-            BufferedReader bufferedReader = new BufferedReader(new FileReader("transactions.csv"));
-            while ((line = bufferedReader.readLine()) != null) {
+            BufferedReader buffReader = new BufferedReader(new FileReader("transactions.csv"));
+            while ((line = buffReader.readLine()) != null) {
                 String[] transaction = line.split("\\|");
                 if (transaction[3].equalsIgnoreCase(vendor)) {
                     System.out.println(line);
+                    foundTransaction=true;
                 }
             }
-            bufferedReader.close();
+            buffReader.close();
         } catch (IOException e) {
             throw new RuntimeException(e);
         }
+                    if(!foundTransaction){
+                        System.out.println("No transaction found.");}
         viewReports();
     }
     public static void customSearch() {
