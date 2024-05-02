@@ -70,11 +70,11 @@ public class accountingledger {
 
         System.out.print(" Please enter deposit description: ");
         String depositDescription = scan.nextLine();
-
+        scan.nextLine();
 
         System.out.print("Please enter deposit vendor: ");
         String depositVendor = scan.nextLine();
-
+        scan.nextLine();
 
         System.out.print("Please enter deposit amount: ");
         double depositAmount = scan.nextDouble();
@@ -168,17 +168,16 @@ public class accountingledger {
     }
     public static void AllTransaction() {
         // Prints all entries to the terminal
-
+        String line;
         foundTransaction=false;
         try {
             BufferedReader buffReader = new BufferedReader(new FileReader("transactions.csv"));
-            List<String> lines = buffReader.lines().collect(Collectors.toList());
-            Collections.reverse(lines);
-            for (String line : lines) {
+
+            while ((line = buffReader.readLine()) != null) {
+
                 System.out.println(line);
                 foundTransaction=true;
             }
-
         } catch (IOException e) {
             throw new RuntimeException(e);
         }
@@ -189,13 +188,12 @@ public class accountingledger {
     }
     // Create the viewDeposits method.
     public static void viewDeposits() {
-
+        String line;
         foundTransaction=false;
+
         try {
-            BufferedReader buffReader = new BufferedReader(new FileReader("transactions.csv"));
-            List<String> lines = buffReader.lines().collect(Collectors.toList());
-            Collections.reverse(lines);
-            for (String line : lines) {
+            BufferedReader bufReader = new BufferedReader(new FileReader("transactions.csv"));
+            while ((line = bufReader.readLine()) != null) {
                 String[] transaction= line.split("\\|");
                 if ((Double.parseDouble(transaction[4])) > 0) {
                     System.out.println(line);
@@ -213,20 +211,18 @@ public class accountingledger {
     }
     // Create the viewPayments method.
     public static void viewPayments() {
-
+        String line;
         foundTransaction=false;
         try {
-            BufferedReader buffReader = new BufferedReader(new FileReader("transactions.csv"));
-            List<String> lines = buffReader.lines().collect(Collectors.toList());
-            Collections.reverse(lines);
-            for (String line : lines) {
-                String[] transaction= line.split("\\|");
+            BufferedReader bufReader = new BufferedReader(new FileReader("transactions.csv"));
+            while ((line = bufReader.readLine()) != null) {
+                String[] transaction = line.split("\\|");
                 if (Double.parseDouble(transaction[4]) < 0){
                     System.out.println(line);
                     foundTransaction=true;
                 }
             }
-            buffReader.close();
+            bufReader.close();
         } catch (IOException e) {
             throw new RuntimeException(e);
         }
@@ -279,14 +275,12 @@ public class accountingledger {
     }
     // Create monthToDate method.
     public static void monthToDate() {
-
+        String line;
         boolean foundTransaction=false;
 
         try {
-            BufferedReader buffReader = new BufferedReader(new FileReader("transactions.csv"));
-            List<String> lines = buffReader.lines().collect(Collectors.toList());
-            Collections.reverse(lines);
-            for (String line : lines) {
+            BufferedReader bufReader = new BufferedReader(new FileReader("transactions.csv"));
+            while ((line = bufReader.readLine()) != null) {
                 String[] transaction = line.split("\\|");
                 String[] date = transaction[0].split("-");
                 if (Double.parseDouble(date[1]) == thisMonth && Double.parseDouble(date[0]) == thisYear) {
@@ -304,13 +298,11 @@ public class accountingledger {
     }
     // Create previousMonth method.
     public static void previousMonth() {
-
+        String line;
         foundTransaction=false;
         try {
             BufferedReader buffReader = new BufferedReader(new FileReader("transactions.csv"));
-            List<String> lines = buffReader.lines().collect(Collectors.toList());
-            Collections.reverse(lines);
-            for (String line : lines) {
+            while ((line = buffReader.readLine()) != null) {
                 String[] transaction = line.split("\\|");
                 String[] date = transaction[0].split("-");
                 if (Double.parseDouble(date[1]) == thisMonth -1 && Integer.parseInt(date[0]) == thisYear) {
@@ -328,15 +320,13 @@ public class accountingledger {
     }
     // Create yearToDate method.
     public static void yearToDate() {
-
+        String line;
         foundTransaction=false;
 
         try {
             BufferedReader buffReader = new BufferedReader(new FileReader("transactions.csv"));
 
-            List<String> lines = buffReader.lines().collect(Collectors.toList());
-            Collections.reverse(lines);
-            for (String line : lines) {
+            while ((line = buffReader.readLine()) != null) {
                 String[] transaction = line.split("\\|");
                 String[] date = transaction[0].split("-");
                 if (Integer.parseInt(date[0]) == thisYear) {
@@ -354,14 +344,12 @@ public class accountingledger {
     }
     // Create previousYear method.
     public static void previousYear() {
-
+        String line;
         foundTransaction=false;
 
         try {
             BufferedReader buffReader = new BufferedReader(new FileReader("transactions.csv"));
-            List<String> lines = buffReader.lines().collect(Collectors.toList());
-            Collections.reverse(lines);
-            for (String line : lines) {
+            while ((line = buffReader.readLine()) != null) {
                 String[] transaction = line.split("\\|");
                 String[] date = transaction[0].split("-");
                 if (Integer.parseInt(date[0]) == thisYear -1) {
@@ -381,13 +369,12 @@ public class accountingledger {
         System.out.print("Please enter the name of the vendor : ");
         String vendor = scan.nextLine();
 
+        String line;
         foundTransaction=false;
 
         try {
             BufferedReader buffReader = new BufferedReader(new FileReader("transactions.csv"));
-            List<String> lines = buffReader.lines().collect(Collectors.toList());
-            Collections.reverse(lines);
-            for (String line : lines) {
+            while ((line = buffReader.readLine()) != null) {
                 String[] transaction = line.split("\\|");
                 if (transaction[3].equalsIgnoreCase(vendor)) {
                     System.out.println(line);
@@ -402,5 +389,6 @@ public class accountingledger {
             System.out.println("No transaction found for the vendor.");}
         viewReports();
     }
-
+    public static void customSearch() {
+    }
 }
