@@ -1,6 +1,6 @@
 # accountingledger
 this program keeps a record of all transactions of the user including deposits and payments.
- it also allows the user to view all transactions ,deposits and payments  as well as filter
+ it also allows the user to view all transactions,deposits, and payments  as well as filter
   transactions by the name of the vendor
 
   
@@ -23,3 +23,10 @@ this program keeps a record of all transactions of the user including deposits a
   view reports
   
   ![Screenshot 2024-05-02 084853](https://github.com/PetuniaGit/accountingledger/assets/120343363/e131df5a-0c82-4037-84ca-01b6b9a568e8)
+
+interesting piece of code is
+
+![Screenshot 2024-05-02 085725](https://github.com/PetuniaGit/accountingledger/assets/120343363/4076d4f6-71aa-4363-a3f5-62cfcc4828f6)
+
+
+This Java code creates a list and sets it up to hold strings. Lines of text are retrieved from a buffered reader and gathered into the list. Next, it uses the Collections. reverse() function to flip the order of the lines in the collection. The lines variable contains the list of lines that have been reversed.
