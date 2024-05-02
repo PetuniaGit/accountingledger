@@ -244,7 +244,6 @@ public class accountingledger {
         System.out.println("Enter 3 to search transactions of current Year.");
         System.out.println("Enter 4 to search transactions of  Previous Year");
         System.out.println("Enter 5 to search  by Vendor");
-        System.out.println("Enter 6 to run  Custom Search");
         System.out.println("Enter 7 to go  Back");
 
         int userInput = scan.nextInt();
@@ -265,10 +264,7 @@ public class accountingledger {
         } else if (userInput == 5) {
             searchByVendor();
 
-        } else if (userInput == 6) {
-            customSearch();
         }
-
         else if (userInput == 7) {
             ledger();
         }

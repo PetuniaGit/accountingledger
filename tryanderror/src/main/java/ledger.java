@@ -11,7 +11,7 @@ import java.util.stream.Collectors;
 /* this program keeps a record of all transactions of the user including deposits and payments.
    it also allows the user to view all transactions ,deposits and payments  as well as filter
     transactions by the name of the vendor.*/
-public class accountingledger {
+public class ledger {
     // Initialize the scanner.
     static Scanner scan=new Scanner(System.in);
 
